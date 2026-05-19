@@ -1,0 +1,246 @@
+Task 1: Access the Command Line Interface
+Subtask 1.1: Connect to Your Lab Environment
+Click the Start Lab button in your Al Nafi dashboard
+Wait for the lab environment to initialize (typically 30-60 seconds)
+Once ready, you will see a terminal window or desktop environment
+If you see a desktop, locate and open the Terminal application
+Subtask 1.2: Verify Your Shell Environment
+Check which shell you are using:
+echo $SHELL
+Verify the Bash version:
+bash --version
+Display your current username:
+whoami
+Show the current date and time:
+date
+Expected Output Example:
+
+[student@lab-machine ~]$ echo $SHELL
+/bin/bash
+[student@lab-machine ~]$ whoami
+student
+Task 2: Use Basic Bash Commands
+Subtask 2.1: Navigate the File System
+Display your current working directory:
+pwd
+List the contents of your current directory:
+ls
+List detailed information about files and directories:
+ls -l
+List all files including hidden ones:
+ls -la
+Navigate to the root directory:
+cd /
+List the contents of the root directory:
+ls
+Return to your home directory:
+cd ~
+Subtask 2.2: Create and Manage Directories
+Create a new directory called lab1-practice:
+mkdir lab1-practice
+Navigate into the new directory:
+cd lab1-practice
+Create multiple directories at once:
+mkdir scripts documents backups
+Create a nested directory structure:
+mkdir -p projects/web/html projects/web/css
+List the directory structure you created:
+ls -R
+Subtask 2.3: Create and Manage Files
+Create an empty file using the touch command:
+touch readme.txt
+Create a file with content using echo:
+echo "Welcome to Bash Shell Lab" > welcome.txt
+Display the contents of the file:
+cat welcome.txt
+Create a file with multiple lines:
+cat > system-info.txt << EOF
+System Information Lab File
+Created on: $(date)
+User: $(whoami)
+Directory: $(pwd)
+EOF
+View the file contents:
+cat system-info.txt
+Subtask 2.4: Copy, Move, and Remove Files
+Copy a file to a new location:
+cp welcome.txt documents/
+Copy a file with a new name:
+cp welcome.txt welcome-backup.txt
+Move a file to a different directory:
+mv readme.txt documents/
+Rename a file:
+mv welcome-backup.txt welcome-copy.txt
+Remove a file:
+rm welcome-copy.txt
+Verify the changes:
+ls
+ls documents/
+Task 3: Practice Using Redirection and Piping
+Subtask 3.1: Output Redirection
+Redirect command output to a file:
+ls -la > file-listing.txt
+View the redirected output:
+cat file-listing.txt
+Append output to an existing file:
+date >> file-listing.txt
+echo "--- End of listing ---" >> file-listing.txt
+View the updated file:
+cat file-listing.txt
+Subtask 3.2: Input Redirection
+Create a file with sample data:
+cat > numbers.txt << EOF
+10
+25
+5
+30
+15
+EOF
+Sort the numbers using input redirection:
+sort < numbers.txt
+Sort and save to a new file:
+sort < numbers.txt > sorted-numbers.txt
+Subtask 3.3: Using Pipes
+List files and count them:
+ls | wc -l
+Display system processes and search for specific ones:
+ps aux | grep bash
+Show disk usage and sort by size:
+du -h | sort -hr
+Display file contents and search for specific text:
+cat /etc/passwd | grep root
+Chain multiple commands with pipes:
+ls -la | grep "^d" | wc -l
+Subtask 3.4: Advanced Redirection Examples
+Redirect both standard output and error:
+ls /nonexistent-directory > output.txt 2> error.txt
+Redirect both to the same file:
+ls /nonexistent-directory > combined.txt 2>&1
+Use tee to display and save output simultaneously:
+ls -la | tee directory-listing.txt
+Task 4: Create and Execute Simple Scripts
+Subtask 4.1: Create Your First Shell Script
+Navigate to the scripts directory:
+cd ~/lab1-practice/scripts
+Create a simple script file:
+cat > hello-world.sh << 'EOF'
+#!/bin/bash
+# My first shell script
+echo "Hello, World!"
+echo "Welcome to Bash scripting!"
+echo "Today is: $(date)"
+echo "Current user: $(whoami)"
+EOF
+Make the script executable:
+chmod +x hello-world.sh
+Execute the script:
+./hello-world.sh
+Subtask 4.2: Create a System Information Script
+Create a more advanced script:
+cat > system-report.sh << 'EOF'
+#!/bin/bash
+# System Information Report Script
+
+echo "=================================="
+echo "    SYSTEM INFORMATION REPORT"
+echo "=================================="
+echo
+echo "Date and Time: $(date)"
+echo "Hostname: $(hostname)"
+echo "Current User: $(whoami)"
+echo "Current Directory: $(pwd)"
+echo
+echo "System Uptime:"
+uptime
+echo
+echo "Disk Usage:"
+df -h | head -5
+echo
+echo "Memory Usage:"
+free -h
+echo
+echo "Number of files in current directory: $(ls | wc -l)"
+echo "=================================="
+EOF
+Make the script executable:
+chmod +x system-report.sh
+Run the script:
+./system-report.sh
+Subtask 4.3: Create an Interactive Script
+Create a script that accepts user input:
+cat > user-info.sh << 'EOF'
+#!/bin/bash
+# Interactive User Information Script
+
+echo "Welcome to the User Information Collector!"
+echo
+
+# Get user input
+read -p "Enter your name: " username
+read -p "Enter your favorite color: " color
+read -p "Enter your age: " age
+
+echo
+echo "=================================="
+echo "User Information Summary"
+echo "=================================="
+echo "Name: $username"
+echo "Favorite Color: $color"
+echo "Age: $age"
+echo "Script run on: $(date)"
+echo "=================================="
+
+# Create a personalized file
+echo "Creating a personalized file for $username..."
+cat > "${username}-info.txt" << EOF
+Personal Information File
+Name: $username
+Favorite Color: $color
+Age: $age
+File created: $(date)
+EOF
+
+echo "File ${username}-info.txt has been created!"
+EOF
+Make the script executable:
+chmod +x user-info.sh
+Run the interactive script:
+./user-info.sh
+Follow the prompts and enter sample information
+Subtask 4.4: Create a File Management Script
+Create a script for file operations:
+cat > file-manager.sh << 'EOF'
+#!/bin/bash
+# Simple File Management Script
+
+echo "File Management Utility"
+echo "======================"
+
+# Create backup directory
+backup_dir="backup-$(date +%Y%m%d)"
+mkdir -p "$backup_dir"
+
+# List current files
+echo "Current files in directory:"
+ls -la
+
+echo
+echo "Creating backup of .txt files..."
+
+# Backup all .txt files
+for file in *.txt; do
+    if [ -f "$file" ]; then
+        cp "$file" "$backup_dir/"
+        echo "Backed up: $file"
+    fi
+done
+
+echo
+echo "Backup completed in directory: $backup_dir"
+echo "Contents of backup directory:"
+ls -la "$backup_dir"
+EOF
+Make the script executable:
+chmod +x file-manager.sh
+Run the file management script:
+./file-manager.sh
